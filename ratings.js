@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Button} from 'react-native';
+import { StatusBar, SafeAreaView, ScrollView, View, Text, FlatList, TouchableOpacity, StyleSheet, Button} from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'; // You can use FontAwesome or any other icon library
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import { useFocusEffect } from '@react-navigation/native-stack';
 
 function Ratings() {
     const [data, setData] = useState([]); // Initialize data as an empty array
@@ -22,11 +21,12 @@ function Ratings() {
             setLoading(false); // Update loading state to false once data is loaded
         })
         .catch((error) => {
-            console.error('Error fetching ratings:', error);
+            console.error(error);
             setLoading(false); // Set loading to false in case of error
         });
     };
 
+    
     useEffect(() => {
         // Retrieve the user's name from AsyncStorage
         AsyncStorage.getItem('user')
@@ -36,7 +36,7 @@ function Ratings() {
                 }
             })
             .catch((error) => {
-                console.error('Error loading user:', error);
+                console.error(error);
             });
 
         // Fetch data on initial load
@@ -57,8 +57,23 @@ function Ratings() {
         }
       }, [ratingDataChanged]);    
 
-    console.log(ratingDataChanged);
-    const handleRatingPress = (item) => {
+        // Check if a song is created by the logged-in user
+        const isSongCreatedByUser = (rating) => {
+            // determine if the song is created by the logged-in user
+            return user === rating.username;
+        };
+
+      
+      //Handles navigation to update page
+      const handleUpdate = (ratingId) => {
+        navigation.navigate('UpdateRating', {
+          ratingId: ratingId,
+          user: user,
+          onDataChanged: refreshRatingsData,
+        });
+      };
+      
+      const handleRatingPress = (item) => {
         // Handle the press on a rating item
         // When rating clicked, should be sent to view screen
         console.log('Rating pressed:', item);
@@ -93,41 +108,47 @@ function Ratings() {
   };
 
   return (
-    <View>
-        <Text style={styles.userText}>Welcome, {user}</Text>
-        <Button
+        <SafeAreaView style={styles.container}>
+          <Text style={styles.userText}>Welcome, {user}</Text>
+          <Button
             title="Add New Rating"
             onPress={() => {
-                (navigation.navigate('Add New Rating', {
-                    user: user,
-                    onRatingAdded: refreshRatingsData, // pass the refresh function
-                }
-                ));
+              navigation.navigate('Add New Rating', {
+                user: user,
+                onRatingAdded: refreshRatingsData,
+              });
             }}
             color="#0C27A4"
-        />
-        {loading ? (
+          />
+          {loading ? (
             <Text>Loading ratings...</Text>
-        ) : (
-            <FlatList
-                data={data}
-                keyExtractor={(rating) => rating.id.toString()}
-                renderItem={({ item }) => (
-                    <View style={styles.ratingItem}>
-                        <TouchableOpacity
-                            onPress={() => handleRatingPress(item)}
-                            style={styles.ratingItem}
-                        >
-                            <Text style={styles.songText}>{item.song}</Text>
-                            <Text style={styles.ratingText}>by {item.artist}</Text>
-                            {renderStars(item.rating)}
-                            <Text style={styles.ratingText}>Rated by: {item.username}</Text>
-                        </TouchableOpacity>
-                    </View>
-                )}
-            />
+          ) : (
+            <ScrollView style={styles.scrollView}>
+                {data.map((item) => (
+                <View style={styles.ratingItem} key={item.id}>
+                    <TouchableOpacity
+                    onPress={() => handleRatingPress(item)}
+                    style={styles.ratingItem}
+                    >
+                    <Text style={styles.songText}>{item.song}</Text>
+                    <Text style={styles.ratingText}>by {item.artist}</Text>
+                    {renderStars(item.rating)}
+                    <Text style={styles.ratingText}>Rated by: {item.username}</Text>
+                    </TouchableOpacity>
+                    {isSongCreatedByUser(item) ? (
+                    <TouchableOpacity
+                        style={styles.updateButton}
+                        onPress={() => handleUpdate(item.id, item.rating)}
+                    >
+                        <FontAwesome name="pencil" size={25} color="#FFFFFF" />
+                    </TouchableOpacity>
+                    ) : null}
+                </View>
+                ))}
+            </ScrollView>
         )}
-    </View>
+    </SafeAreaView>
+
 );
 }
 
@@ -159,7 +180,15 @@ const styles = StyleSheet.create({
         fontSize: 24,
         paddingTop: 15,
         paddingBottom: 10
-    }
+    },
+    scrollView: {
+        backgroundColor: '#FFFFFF',
+        marginHorizontal: 20,
+    },
+    container: {
+        flex: 1,
+        paddingTop: StatusBar.currentHeight,
+      }
   });
   
 

@@ -11,7 +11,7 @@ function DeleteRating({ ratingId, onDataChanged }) {
   const handleDelete = async () => {
     try {
       const username = await AsyncStorage.getItem("user");
-      const response = await fetch("http://localhost/COMP333_HW3/index.php/deleterating", {
+      const response = await fetch("http://129.133.188.213/COMP333_HW4_backend/index.php/deleterating", {
         method: "DELETE",
         body: JSON.stringify({
           "username": username,
@@ -29,7 +29,7 @@ function DeleteRating({ ratingId, onDataChanged }) {
         navigation.navigate('Ratings');
       } else if (response.status === 400) {
         setMessage(responseJson.error);
-      } else {
+      } else { 
         setMessage("Something went wrong");
       }
     } catch (error) {
