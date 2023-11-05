@@ -9,7 +9,7 @@ function AddNewRating({ route }) {
     const [rating, setRating] = useState('');
     const [message, setMessage] = useState('');
     const navigation = useNavigation();
-    const { onRatingAdded, user } = route.params;
+    const { user, onRatingAdded } = route.params;
 
     // Handle the form submission
     const handleSubmit = async () => {
