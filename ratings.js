@@ -5,26 +5,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { useFocusEffect } from '@react-navigation/native-stack';
 
-function Ratings({ route }) {
+function Ratings() {
     const [data, setData] = useState([]); // Initialize data as an empty array
     const [loading, setLoading] = useState(true); // Initialize loading state as true
     const [user, setUser] = useState(null); // Initialize user state
     const navigation = useNavigation(); // Get the navigation object
-    const { ratingDataChanged } = route.params;
+    const [ratingDataChanged, setRatingDataChanged] = useState(false); // Declare ratingDataChanged as a state variable
 
-    // Fetch ratings data from the API
+
     const fetchData = () => {
-        // Retrieve the user's name from AsyncStorage
-        AsyncStorage.getItem('user')
-            .then((value) => {
-                if (value) {
-                    setUser(value);
-                }
-            })
-            .catch((error) => {
-                console.error('Error loading user:', error);
-            });
-
         // CHANGE IP ADDRESS TO YOUR SPECIFIC
         fetch('http://129.133.188.213/COMP333_HW4_backend/index.php/ratings')
         .then((response) => response.json())
@@ -39,18 +28,36 @@ function Ratings({ route }) {
     };
 
     useEffect(() => {
-        fetchData(); // Initial data fetch
-    
-        // Add ratingDataChanged as a dependency to re-fetch data when it changes
-    }, [user]);
-  
-    // Use the useFocusEffect hook to automatically refresh data when the screen is focused
-    useFocusEffect(
-        React.useCallback(() => {
-            fetchData();
-        }, [])
-    );
+        // Retrieve the user's name from AsyncStorage
+        AsyncStorage.getItem('user')
+            .then((value) => {
+                if (value) {
+                    setUser(value);
+                }
+            })
+            .catch((error) => {
+                console.error('Error loading user:', error);
+            });
 
+        // Fetch data on initial load
+        fetchData();
+    }, []);
+
+      // Handles refreshing for new data
+    const refreshRatingsData = () => {
+        setRatingDataChanged(!ratingDataChanged);
+    };
+
+    useEffect(() => {
+        // Conditionally fetch data when ratingDataChanged is true
+        if (ratingDataChanged) {
+          fetchData();
+          // Reset the state to false after data is fetched
+          setRatingDataChanged(false);
+        }
+      }, [ratingDataChanged]);    
+
+    console.log(ratingDataChanged);
     const handleRatingPress = (item) => {
         // Handle the press on a rating item
         // When rating clicked, should be sent to view screen
@@ -90,9 +97,13 @@ function Ratings({ route }) {
         <Text style={styles.userText}>Welcome, {user}</Text>
         <Button
             title="Add New Rating"
-            onPress={() =>
-                navigation.navigate('Add New Rating', { user, onRatingAdded: refreshRatingsData })
-            }
+            onPress={() => {
+                (navigation.navigate('Add New Rating', {
+                    user: user,
+                    onRatingAdded: refreshRatingsData, // pass the refresh function
+                }
+                ));
+            }}
             color="#0C27A4"
         />
         {loading ? (

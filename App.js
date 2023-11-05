@@ -12,7 +12,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage'; // Import 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [ratingDataChanged, setRatingDataChanged] = useState(false); // Declare ratingDataChanged as a state variable
   const [user, setUser] = useState(null); // Initialize user state
 
   useEffect(() => {
@@ -28,10 +27,6 @@ export default function App() {
       });
   }, []); // Fetch the user data on app start
 
-  // Handles refreshing for new data
-  const refreshRatingsData = () => {
-    setRatingDataChanged(!ratingDataChanged);
-  };
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
@@ -39,7 +34,6 @@ export default function App() {
         <Stack.Screen
           name="Ratings"
           component={Ratings}
-          initialParams={{ ratingDataChanged }}
           options={({ navigation }) => ({
             headerRight: () => (
               <Button
@@ -53,7 +47,6 @@ export default function App() {
         <Stack.Screen
           name="Add New Rating"
           component={AddNewRating}
-          initialParams={{ onRatingAdded: refreshRatingsData, user: user }}
         />
         <Stack.Screen
           name="Logout"
