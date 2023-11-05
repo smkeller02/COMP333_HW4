@@ -8,6 +8,7 @@ import Logout from './logout';
 import CreateUser from './createuser';
 import AddNewRating from './addnewrating';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
+import UpdateRating from './update';
 
 const Stack = createNativeStackNavigator();
 
@@ -56,8 +57,12 @@ export default function App() {
           }}
         />
         <Stack.Screen
-          name="Sign Up"
+          name="CreateUser"
           component={CreateUser}
+        />
+        <Stack.Screen
+          name="UpdateRating"
+          component={UpdateRating}
         />
     </Stack.Navigator>
     </NavigationContainer>
