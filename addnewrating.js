@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Button, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { FontAwesome } from '@expo/vector-icons';
 
 function AddNewRating({ route }) {
     // State variables to manage user input and messages
@@ -53,6 +54,38 @@ function AddNewRating({ route }) {
     }
   };
 
+    // Function to handle star rating selection
+    const handleStarPress = (starIndex) => {
+      // Set the rating based on the selected star
+      setRating(starIndex + 1);
+    };
+  
+    // Function to render star icons
+    const renderStars = () => {
+      const maxRating = 5;
+      const starArray = [];
+  
+      for (let i = 0; i < maxRating; i++) {
+        starArray.push(
+          <TouchableOpacity
+            key={i}
+            onPress={() => handleStarPress(i)}
+            style={styles.starContainer}
+          >
+            <FontAwesome
+              name={i < rating ? 'star' : 'star-o'}
+              size={40}
+              color={i < rating ? 'gold' : 'gray'}
+            />
+          </TouchableOpacity>
+        );
+      }
+  
+      return (
+        <View style={styles.starRatingContainerHorizontal}>{starArray}</View>
+        );
+    };
+
   return (
     <View style={styles.container}>
         <Text style={styles.userText}>Welcome, {user}</Text>
@@ -68,15 +101,11 @@ function AddNewRating({ route }) {
         placeholder="Song"
         onChangeText={(text) => setSong(text)}
       />
-      <TextInput
-        style={styles.input}
-        value={rating}
-        placeholder="Rating"
-        onChangeText={(text) => setRating(text)}
-      />
-      <TouchableOpacity onPress={handleSubmit}>
-        <Text style={styles.text}>Add rating</Text>
-      </TouchableOpacity>
+      <Text style={styles.text}>{renderStars()}</Text>
+        <TouchableOpacity onPress={handleSubmit} style={styles.buttonContainer}>
+          <Text style={styles.text}>Update rating</Text>
+        </TouchableOpacity>
+
 
       {/* Display success or error message, if present */}
       <View>
@@ -120,7 +149,11 @@ const styles = StyleSheet.create({
  text: {
     color: '#FFFFFF',
     fontSize: 20,
- }
+    paddingBottom: 20,
+ },
+ starRatingContainerHorizontal: {
+  flexDirection: 'row', // Set the direction to row for horizontal arrangement
+}
 });
 
 export default AddNewRating;

@@ -62,7 +62,6 @@ function Ratings() {
             // determine if the song is created by the logged-in user
             return user === rating.username;
         };
-
       
       //Handles navigation to update page
       const handleUpdate = (ratingId) => {
