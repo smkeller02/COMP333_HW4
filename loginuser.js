@@ -83,8 +83,9 @@ export default function LoginUser() {
       <View>
         <Text style={styles.message}>{message}</Text>
       </View>
+      <Text style={styles.signuptext}>Don't have an account?</Text>
       <TouchableOpacity onPress={handleSignUp}>
-        <Text style={styles.signuptext}>Signup</Text>
+        <Text style={styles.signuptext}>Sign up here</Text>
       </TouchableOpacity>
     </View>
   );
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
   },
   button: {
     color: '#FFFFFF',
-    fontSize: 20
+    fontSize: 22
   },
   signuptext: {
     color: '#FFFFFF',
