@@ -65,7 +65,7 @@ function Ratings() {
       
       //Handles navigation to update page
       const handleUpdate = (ratingId) => {
-        navigation.navigate('UpdateRating', {
+        navigation.navigate('Update Rating', {
           ratingId: ratingId,
           user: user,
           onDataChanged: refreshRatingsData,
