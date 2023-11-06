@@ -102,6 +102,7 @@ function CreateUser() {
       <View>
         <Text style={styles.message}>{message}</Text>
       </View>
+      <Text style={styles.logintext}>Already have an account?</Text>
       <TouchableOpacity onPress={handleLogin}>
         <Text style={styles.logintext}>Login</Text>
       </TouchableOpacity>
