@@ -61,7 +61,7 @@ export default function App() {
           component={CreateUser}
         />
         <Stack.Screen
-          name="UpdateRating"
+          name="Update Rating"
           component={UpdateRating}
         />
     </Stack.Navigator>

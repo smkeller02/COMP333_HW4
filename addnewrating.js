@@ -88,7 +88,7 @@ function AddNewRating({ route }) {
 
   return (
     <View style={styles.container}>
-        <Text style={styles.userText}>Welcome, {user}</Text>
+        <Text style={styles.userText}>Username: {user}</Text>
       <TextInput
         style={styles.input}
         value={artist}
@@ -103,7 +103,7 @@ function AddNewRating({ route }) {
       />
       <Text style={styles.text}>{renderStars()}</Text>
         <TouchableOpacity onPress={handleSubmit} style={styles.buttonContainer}>
-          <Text style={styles.text}>Update rating</Text>
+          <Text style={styles.text}>Add rating</Text>
         </TouchableOpacity>
 
 

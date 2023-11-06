@@ -109,6 +109,7 @@ function UpdateRating({ route }) {
 
   return (
     <View style={styles.updateRating}>
+       <Text style={styles.userText}>Username: {user}</Text>
       <View>
         <TextInput
           style={styles.input}
@@ -173,7 +174,15 @@ const styles = StyleSheet.create({
   },
   starRatingContainerHorizontal: {
     flexDirection: 'row', // Set the direction to row for horizontal arrangement
-  }
+  },  
+  userText: {
+    color: '#FFFFFF',
+    fontWeight: '900', // Make the text bold
+    textAlign: 'center',
+    fontSize: 24,
+    paddingTop: 15,
+    paddingBottom: 10
+ }
 });
 
 export default UpdateRating;
