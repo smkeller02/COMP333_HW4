@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { FontAwesome } from '@expo/vector-icons';
 
 function UpdateRating({ route }) {
   const [artist, setArtist] = useState('');
   const [song, setSong] = useState('');
-  const [rating, setRating] = useState('');
+  const [rating, setRating] = useState(0); // Initialize rating as a number
   const [message, setMessage] = useState('');
   const { ratingId, user, onDataChanged } = route.params;
   const navigation = useNavigation();
@@ -26,7 +27,7 @@ function UpdateRating({ route }) {
           } else {
             setArtist(data[0].artist);
             setSong(data[0].song);
-            setRating(String(data[0].rating));
+            setRating(data[0].rating); // Ensure rating is a number
           }
         })
         .catch((error) => {
@@ -38,9 +39,9 @@ function UpdateRating({ route }) {
   const handleCancel = () => {
     setArtist('');
     setSong('');
-    setRating('');
+    setRating(0); // Reset rating to 0
     setMessage('');
-    navigation.navigate('Ratings'); // Navigate to the 'Ratings' screen
+    navigation.navigate('Ratings');
   };
 
   const handleSubmit = async () => {
@@ -52,7 +53,7 @@ function UpdateRating({ route }) {
           username: user,
           artist,
           song,
-          rating: parseFloat(rating), // Convert rating to a number
+          rating,
         }),
         headers: {
           'Content-Type': 'application/json',
@@ -63,7 +64,7 @@ function UpdateRating({ route }) {
       if (response.status === 200) {
         setMessage('Rating updated');
         onDataChanged();
-        navigation.navigate('Ratings')
+        navigation.navigate('Ratings');
       } else if (response.status === 400) {
         setMessage(resJson.error);
       } else {
@@ -74,41 +75,65 @@ function UpdateRating({ route }) {
     }
   };
 
+  // Function to handle star rating selection
+  const handleStarPress = (starIndex) => {
+    // Set the rating based on the selected star
+    setRating(starIndex + 1);
+  };
+
+  // Function to render star icons
+  const renderStars = () => {
+    const maxRating = 5;
+    const starArray = [];
+
+    for (let i = 0; i < maxRating; i++) {
+      starArray.push(
+        <TouchableOpacity
+          key={i}
+          onPress={() => handleStarPress(i)}
+          style={styles.starContainer}
+        >
+          <FontAwesome
+            name={i < rating ? 'star' : 'star-o'}
+            size={40}
+            color={i < rating ? 'gold' : 'gray'}
+          />
+        </TouchableOpacity>
+      );
+    }
+
+    return (
+      <View style={styles.starRatingContainerHorizontal}>{starArray}</View>
+      );
+  };
+
   return (
     <View style={styles.updateRating}>
-        <View>
-          <TextInput
-            style={styles.input}
-            value={artist}
-            onChangeText={(text) => setArtist(text)}
-            placeholder="Artist"
-          />
-          <TextInput
-            style={styles.input}
-            value={song}
-            onChangeText={(text) => setSong(text)}
-            placeholder="Song"
-          />
-          <TextInput
-            style={styles.input}
-            value={rating}
-            onChangeText={(text) => setRating(text)}
-            placeholder="Rating"
-          />
-          <View>
-            <TouchableOpacity onPress={handleSubmit}>
-              <Text style={styles.text}>Update rating</Text>
-            </TouchableOpacity>
+      <View>
+        <TextInput
+          style={styles.input}
+          value={artist}
+          onChangeText={(text) => setArtist(text)}
+          placeholder="Artist"
+        />
+        <TextInput
+          style={styles.input}
+          value={song}
+          onChangeText={(text) => setSong(text)}
+          placeholder="Song"
+        />
+      <Text style={styles.text}>{renderStars()}</Text>
+        <TouchableOpacity onPress={handleSubmit} style={styles.buttonContainer}>
+          <Text style={styles.text}>Update rating</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleCancel} style={styles.buttonContainer}>
+          <Text style={styles.text}>Cancel</Text>
+        </TouchableOpacity>
 
-            <View>
-                {message ? <Text style={styles.message}>{message}</Text> : null}
-            </View>
-
-            <TouchableOpacity onPress={handleCancel}>
-              <Text style={styles.text}>Cancel</Text>
-            </TouchableOpacity>
-          </View>
+        <View style={styles.messageContainer}>
+          {message ? <Text style={styles.messageText}>{message}</Text> : null}
         </View>
+      </View>
     </View>
   );
 }
@@ -139,12 +164,16 @@ const styles = StyleSheet.create({
   message: {
     color: '#FF6B6B',
     fontSize: 18,
+    backgroundColor: '#0C27A4',
   },
   text: {
     color: '#FFFFFF',
     fontSize: 20,
     paddingBottom: 20,
   },
+  starRatingContainerHorizontal: {
+    flexDirection: 'row', // Set the direction to row for horizontal arrangement
+  }
 });
 
 export default UpdateRating;
