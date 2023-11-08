@@ -54,6 +54,11 @@ function AddNewRating({ route }) {
     }
   };
 
+    // Returns user back to main page when they press cancel
+    const handleCancel = () => {
+      navigation.navigate('Ratings');
+    }
+
     // Function to handle star rating selection
     const handleStarPress = (starIndex) => {
       // Set the rating based on the selected star
@@ -112,7 +117,10 @@ function AddNewRating({ route }) {
         <Text style={styles.message}>{message}</Text>
       </View>
 
-      <Button title="Cancel" onPress={() => navigation.navigate('Ratings')} color="#FFFFFF"/>
+       <TouchableOpacity onPress={handleCancel} style={styles.buttonContainer}>
+         <Text style={styles.text}>Cancel</Text>
+       </TouchableOpacity>
+
 
     </View>
   );

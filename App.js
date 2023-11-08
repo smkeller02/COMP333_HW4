@@ -31,23 +31,26 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={LoginUser} />
+        <Stack.Screen 
+          name="Login" 
+          component={LoginUser}
+          options={{
+            headerShown: false
+          }}
+           />
         <Stack.Screen
           name="Ratings"
           component={Ratings}
-          options={({ navigation }) => ({
-            headerRight: () => (
-              <Button
-                title="Log Out"
-                onPress={() => navigation.navigate('Logout')}
-              />
-            ),
-            headerBackVisible: false, // Hide the back button
-          })}
+          options={{
+            headerShown: false
+          }}
         />
         <Stack.Screen
           name="Add New Rating"
           component={AddNewRating}
+          options={{
+            headerShown: false, // Hide the header for the Logout screen
+          }}
         />
         <Stack.Screen
           name="Logout"
@@ -59,10 +62,16 @@ export default function App() {
         <Stack.Screen
           name="CreateUser"
           component={CreateUser}
+          options={{
+            headerShown: false
+          }}
         />
         <Stack.Screen
           name="Update Rating"
           component={UpdateRating}
+          options={{
+            headerShown: false, // Hide the header for the Logout screen
+          }}
         />
     </Stack.Navigator>
     </NavigationContainer>

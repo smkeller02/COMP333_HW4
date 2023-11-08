@@ -141,10 +141,9 @@ function UpdateRating({ route }) {
 
 const styles = StyleSheet.create({
   updateRating: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#0C27A4',
-    marginVertical: 10,
-    padding: 20,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     alignItems: 'center',
     backgroundColor: '#0C27A4',
     fontSize: 20,

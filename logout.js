@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
@@ -17,10 +17,22 @@ const Logout = () => {
     }
   };
 
+  const handleCancel = () => {
+    navigation.navigate('Ratings');
+  };
+
   return (
     <View style={styles.container}>
-      <Text>Are you sure you want to log out?</Text>
-      <Button title="Log Out" onPress={handleLogout} />
+      <Text style={styles.text}>Are you sure you want to log out?</Text>
+      
+      <TouchableOpacity onPress={handleLogout}>
+        <Text style={styles.logoutbutton}>Logout</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={handleCancel} style={styles.buttonContainer}>
+          <Text style={styles.cancelbutton}>Cancel</Text>
+        </TouchableOpacity>
+
     </View>
   );
 };
@@ -30,7 +42,25 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#0C27A4',
   },
+  logoutbutton: {
+    paddingTop: 20,
+    color: '#FFFFFF',
+    fontSize: 26,
+    fontWeight: '400'
+  },
+  cancelbutton : {
+    paddingTop: 20,
+    color: '#FFFFFF',
+    fontSize: 22
+  },
+  text: {
+    fontSize: 23,
+    fontWeight: '700',
+    paddingBottom: 20,
+    color: '#FFFFFF',
+  }
 });
 
 export default Logout;

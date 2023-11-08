@@ -3,6 +3,7 @@ import { StatusBar, SafeAreaView, ScrollView, View, Text, FlatList, TouchableOpa
 import { FontAwesome } from '@expo/vector-icons'; // You can use FontAwesome or any other icon library
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import Logout from './logout';
 
 function Ratings() {
     const [data, setData] = useState([]); // Initialize data as an empty array
@@ -63,6 +64,11 @@ function Ratings() {
             return user === rating.username;
         };
       
+      // Handles logout request
+      const handleLogout = () => {
+        navigation.navigate('Logout');
+      }
+
       //Handles navigation to update page
       const handleUpdate = (ratingId) => {
         navigation.navigate('Update Rating', {
@@ -108,6 +114,9 @@ function Ratings() {
 
   return (
         <SafeAreaView style={styles.container}>
+          <TouchableOpacity onPress={handleLogout}>
+            <Text style={styles.logouttext}>Logout</Text>
+          </TouchableOpacity>
           <Text style={styles.userText}>Welcome, {user}</Text>
           <Button
             title="Add New Rating"
@@ -187,6 +196,14 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: StatusBar.currentHeight,
+      },
+      logouttext: {
+        color: '#0C27A4',
+        fontSize: 18,
+        fontWeight: '500',
+        paddingTop: 10,
+        paddingRight: 20,
+        textAlign: 'right'
       }
   });
   
