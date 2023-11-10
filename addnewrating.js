@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
 
 function AddNewRating({ route }) {
+
     // State variables to manage user input and messages
     const [artist, setArtist] = useState('');
     const [song, setSong] = useState('');
