@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StatusBar, SafeAreaView, ScrollView, View, Text, FlatList, TouchableOpacity, StyleSheet, Button} from 'react-native';
+import { StatusBar, SafeAreaView, ScrollView, View, Text, FlatList, TouchableOpacity, StyleSheet, Button, LogBox} from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'; // You can use FontAwesome or any other icon library
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
@@ -12,6 +12,10 @@ function Ratings() {
     const navigation = useNavigation(); // Get the navigation object
     const [ratingDataChanged, setRatingDataChanged] = useState(false); // Declare ratingDataChanged as a state variable
 
+    //Told in TA session to use this to ignore warning as functionality was working
+    LogBox.ignoreLogs([
+      'Non-serializable values were found in the navigation state',
+    ]);
 
     const fetchData = () => {
         // CHANGE IP ADDRESS TO YOUR SPECIFIC
