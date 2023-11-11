@@ -4,6 +4,7 @@ import { FontAwesome } from '@expo/vector-icons'; // You can use FontAwesome or 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import Logout from './logout';
+import ViewRating from './view'
 
 function Ratings() {
     const [data, setData] = useState([]); // Initialize data as an empty array
@@ -139,7 +140,7 @@ function Ratings() {
                 {data.map((item) => (
                 <View style={styles.ratingItem} key={item.id}>
                     <TouchableOpacity
-                    onPress={() => handleRatingPress(item)}
+                    onPress={() => navigation.navigate('ViewRating', { ratingData: item })}
                     style={styles.ratingItem}
                     >
                     <Text style={styles.songText}>{item.song}</Text>
