@@ -70,6 +70,24 @@ function Ratings() {
             // determine if the song is created by the logged-in user
             return user === rating.username;
         };
+
+        const filterItems = () => {
+          const searchTerms = searchQuery.toLowerCase().trim();
+          if (filterParam === 'All') {
+            setFilteredData(
+              data.filter((rating) =>
+                searchTerms === '' ||
+                rating.username?.toLowerCase().includes(searchTerms) ||
+                rating.artist?.toLowerCase().includes(searchTerms) ||
+                rating.song?.toLowerCase().includes(searchTerms) ||
+                rating.rating?.toString().includes(searchTerms)
+              )
+            );
+          } else {
+            const filterProperty = filterParam?.toLowerCase();
+            setFilteredData(data.filter((rating) => rating[filterProperty]?.toLowerCase().includes(searchTerms)));
+          }
+        };
       
       // Handles logout request
       const handleLogout = () => {
