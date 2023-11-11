@@ -14,7 +14,7 @@ function ViewRating({ ratingData }) {
 
   return (
     <View style={styles.container}>
-      <Text>Title: {ratingData.title}</Text>
+      <Text>Title: {ratingData.song}</Text>
       <Text>Artist: {ratingData.artist}</Text>
       <Text>Username: {ratingData.username}</Text>
       <Text>Rating: {ratingData.rating}</Text>

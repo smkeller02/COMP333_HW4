@@ -10,32 +10,35 @@ import { TopRatedSongs, AverageSongRatings, SongsPerArtist } from './statistics_
 
 // Main screen that shows ratings and allows user to navigate to update, delete, view, logout, and add new rating screens
 function Ratings() {
-  // Initializing states
-  const [data, setData] = useState([]); // Initialize data as an empty array
-  const [loading, setLoading] = useState(true); // Initialize loading state as true
-  const [user, setUser] = useState(null); // Initialize user state
-  const navigation = useNavigation(); // Get the navigation object
-  const [ratingDataChanged, setRatingDataChanged] = useState(false); // Declare ratingDataChanged as a state variable
+    // Initializing states
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState(null);
+    const navigation = useNavigation(); // Get the navigation object
+    const [ratingDataChanged, setRatingDataChanged] = useState(false);
+    const [filteredData, setFilteredData] = useState([]);
+    const [filterParam, setFilterParam] = useState('All');
+    const [searchQuery, setSearchQuery] = useState('');
 
-  // Told in TA session to use this to ignore warning as functionality was working
-  LogBox.ignoreLogs([
-    'Non-serializable values were found in the navigation state',
-  ]);
+    //Told in TA session to use this to ignore warning as functionality was working
+    LogBox.ignoreLogs([
+      'Non-serializable values were found in the navigation state',
+    ]);
 
-  // Fetch data from database, request to backend
-  const fetchData = () => {
-      // CHANGE IP ADDRESS TO YOUR SPECIFIC
-      fetch('http://129.133.188.213/COMP333_HW4_backend/index.php/ratings')
-      .then((response) => response.json())
-      .then((ratingsData) => {
-          setData(ratingsData); // Set data with fetched ratings
-          setLoading(false); // Update loading state to false once data is loaded
-      })
-      .catch((error) => {
-          console.error(error);
-          setLoading(false); // Set loading to false in case of error
-      });
-  };
+    // Fetch data from database, request to backend
+    const fetchData = () => {
+        // CHANGE IP ADDRESS TO YOUR SPECIFIC
+        fetch('http://129.133.188.213/COMP333_HW4_backend/index.php/ratings')
+        .then((response) => response.json())
+        .then((ratingsData) => {
+            setData(ratingsData); // Set the data with the fetched ratings
+            setLoading(false); // Update loading state to false once data is loaded
+        })
+        .catch((error) => {
+            console.error(error);
+            setLoading(false); // Set loading to false in case of error
+        });
+    };
     
   useEffect(() => {
       // Retrieve the user's name from AsyncStorage
@@ -62,8 +65,50 @@ function Ratings() {
       // Conditionally fetch data when ratingDataChanged is true to auto reload once ratings datatable is changed
       if (ratingDataChanged) {
         fetchData();
-        // Reset the state to false after data is fetched
-        setRatingDataChanged(false);
+
+    }, []);
+
+      // Handles refreshing for new data
+    const refreshRatingsData = () => {
+        setRatingDataChanged(!ratingDataChanged);
+    };
+
+    useEffect(() => {
+        // Conditionally fetch data when ratingDataChanged is true
+        if (ratingDataChanged) {
+          fetchData();
+          // Reset the state to false after data is fetched
+          setRatingDataChanged(false);
+        }
+      }, [ratingDataChanged]);    
+
+        // Check if a song is created by the logged-in user
+        const isSongCreatedByUser = (rating) => {
+            // determine if the song is created by the logged-in user
+            return user === rating.username;
+        };
+
+        const filterItems = () => {
+          const searchTerms = searchQuery.toLowerCase().trim();
+          if (filterParam === 'All') {
+            setFilteredData(
+              data.filter((rating) =>
+                searchTerms === '' ||
+                rating.username?.toLowerCase().includes(searchTerms) ||
+                rating.artist?.toLowerCase().includes(searchTerms) ||
+                rating.song?.toLowerCase().includes(searchTerms) ||
+                rating.rating?.toString().includes(searchTerms)
+              )
+            );
+          } else {
+            const filterProperty = filterParam?.toLowerCase();
+            setFilteredData(data.filter((rating) => rating[filterProperty]?.toLowerCase().includes(searchTerms)));
+          }
+        };
+      
+      // Handles logout request
+      const handleLogout = () => {
+        navigation.navigate('Logout');
       }
     }, [ratingDataChanged]);    
 
@@ -113,78 +158,96 @@ function Ratings() {
       // displays star rating
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         {starArray}
-        {isSongCreatedByUser ? (
-          <>
-            <TouchableOpacity
-            style={styles.deleteButton}
-            onPress={() => navigation.navigate('DeleteRating', { ratingId: item.id, onDataChanged: refreshRatingsData })}>
-              <FontAwesome name="trash" size={25} color="#FFFFFF" />
-            </TouchableOpacity>
-          </>
-        ) : null}
       </View>
     );
   };
 
-return (
-      <SafeAreaView style={styles.container}>
-
-        {/* button for user to log */}
-        <TouchableOpacity onPress={handleLogout}>
-          <Text style={styles.logouttext}>Logout</Text>
-        </TouchableOpacity>
-
-        {/* welcome message */}
-        <Text style={styles.userText}>Welcome, {user}</Text>
+  return (
+        <SafeAreaView style={styles.container}>
+          {/* button for user to logout */}
+          <TouchableOpacity onPress={handleLogout}>
+            <Text style={styles.logouttext}>Logout</Text>
+          </TouchableOpacity>
+          
+          {/* welcome message */}
+          <Text style={styles.userText}>Welcome, {user}</Text>
         
-        {/* button for adding new rating that navigates user to add new rating screen */}
-        <Button
-          title="Add New Rating"
-          onPress={() => {
-            navigation.navigate('Add New Rating', {
-              user: user,
-              onRatingAdded: refreshRatingsData,
-            });
-          }}
-          color="#0C27A4"
-        />
+          {/* button for adding new rating that navigates user to add new rating screen */}
+          <Button
+            title="Add New Rating"
+            onPress={() => {
+              navigation.navigate('Add New Rating', {
+                user: user,
+                onRatingAdded: refreshRatingsData,
+              });
+            }}
+            color="#0C27A4"
+          />
+          // Search + filter functionality
+          <View style={styles.searchContainer}>
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search for..."
+              value={searchQuery}
+              onChangeText={(text) => setSearchQuery(text)}
+            />
+            <View style={styles.filterSelect}>
+              <Text>Filter By: </Text>
+              <Picker
+                selectedValue={filterParam}
+                onValueChange={(itemValue) => setFilterParam(itemValue)}>
+                <Picker.Item label="No Filter" value="All" />
+                <Picker.Item label="User" value="username" />
+                <Picker.Item label="Artist" value="artist" />
+                <Picker.Item label="Song" value="song" />
+                <Picker.Item label="Rating" value="rating" />
+              </Picker>
+            </View>
+          </View>
 
-        {/* Conditionally render loading message or a list of ratings */}
-        {loading ? (
-          <Text>Loading ratings...</Text>
-        ) : (
-          <ScrollView style={styles.scrollView}>
-              {data.map((item) => (
-              // Render each rating item in list
-              <View style={styles.ratingItem} key={item.id}>
-                  <TouchableOpacity
-                  onPress={() => navigation.navigate('ViewRating', { ratingData: item })}
-                  style={styles.ratingItem}
-                  >
-                  <Text style={styles.songText}>{item.song}</Text>
-                  <Text style={styles.ratingText}>by {item.artist}</Text>
-                  {renderStars(item.rating)}
-                  <Text style={styles.ratingText}>Rated by: {item.username}</Text>
-                  </TouchableOpacity>
+          {/* Conditionally render loading message or a list of ratings */}
+          {loading ? (
+            <Text>Loading ratings...</Text>
+          ) : (
+            <ScrollView style={styles.scrollView}>
+                {data.map((item) => (
+                // Render each rating item in list
+                <View style={styles.ratingItem} key={item.id}>
+                    <TouchableOpacity
+                    onPress={() => navigation.navigate('ViewRating', { ratingData: item })}
+                    style={styles.ratingItem}
+                    >
+                    <Text style={styles.songText}>{item.song}</Text>
+                    <Text style={styles.ratingText}>by {item.artist}</Text>
+                    {renderStars(item.rating)}
+                    <Text style={styles.ratingText}>Rated by: {item.username}</Text>
+                    </TouchableOpacity>
 
-                  {/* Check that rating was created by user, if so, show update and delete icons, if not, null */}
-                  {isSongCreatedByUser(item) ? (
-                  // Show update icon
-                  <TouchableOpacity
-                      style={styles.updateButton}
-                      onPress={() => handleUpdate(item.id, item.rating)}
-                  >
-                      <FontAwesome name="pencil" size={25} color="#FFFFFF" />
-                  </TouchableOpacity>
-                  ) : null}
-              </View>
-              ))}
-              <TopRatedSongs ratings={data} />
-              <AverageSongRatings ratings={data} />
-              <SongsPerArtist ratings={data} />
-          </ScrollView>
-      )}
-  </SafeAreaView>
+                    {/* Check that rating was created by user, if so, show update and delete icons, if not, null */}
+                    {isSongCreatedByUser(item) ? (
+                    <View style={styles.iconContainer}>
+                      // Show update icon
+                      <TouchableOpacity style={styles.updateButton} onPress={() => handleUpdate(item.id, item.rating)}>
+                        <FontAwesome name="pencil" size={25} color="#FFFFFF" />
+                      </TouchableOpacity>
+                      // Show delete icon
+                      <TouchableOpacity
+                        style={styles.deleteButton}
+                        onPress={() => navigation.navigate('DeleteRating', { ratingId: item.id, onDataChanged: () => setRatingDataChanged(!ratingDataChanged) })}>
+                        <FontAwesome name="trash" size={25} color="#FFFFFF" />
+                      </TouchableOpacity>
+                    </View>
+                    ) : null}
+                </View>
+                ))}
+                
+                // Statistical component
+                <TopRatedSongs ratings={filteredData} />
+                <AverageSongRatings ratings={filteredData} />
+                <SongsPerArtist ratings={filteredData} />
+            </ScrollView>
+        )}
+    </SafeAreaView>
 
 );
 }
