@@ -13,6 +13,7 @@ function Ratings() {
     const [loading, setLoading] = useState(true); // Initialize loading state as true
     const [user, setUser] = useState(null); // Initialize user state
     const navigation = useNavigation(); // Get the navigation object
+    const [searchQuery, setSearchQuery] = useState('');
     const [ratingDataChanged, setRatingDataChanged] = useState(false); // Declare ratingDataChanged as a state variable
 
     //Told in TA session to use this to ignore warning as functionality was working
