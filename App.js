@@ -9,6 +9,7 @@ import CreateUser from './createuser';
 import AddNewRating from './addnewrating';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
 import UpdateRating from './update';
+import ViewRating from './view';
 
 const Stack = createNativeStackNavigator();
 
@@ -71,6 +72,13 @@ export default function App() {
           component={UpdateRating}
           options={{
             headerShown: false, // Hide the header for the Logout screen
+          }}
+        />
+        <Stack.Screen
+          name="View Rating"
+          component={ViewRating}
+          options={{
+            headerShown: false, 
           }}
         />
     </Stack.Navigator>
