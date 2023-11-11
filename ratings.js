@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StatusBar, SafeAreaView, ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, Button, LogBox} from 'react-native';
-import { FontAwesome } from '@expo/vector-icons'; // You can use FontAwesome or any other icon library
+import { FontAwesome } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import Logout from './logout';
@@ -37,7 +37,6 @@ function Ratings() {
         });
     };
 
-    
     useEffect(() => {
         // Retrieve the user's name from AsyncStorage
         AsyncStorage.getItem('user')
@@ -66,31 +65,47 @@ function Ratings() {
           // Reset the state to false after data is fetched
           setRatingDataChanged(false);
         }
-      }, [ratingDataChanged]);    
+        filterItems();
+      }, [ratingDataChanged, searchQuery, filterParam]);    
 
-        // Check if a song is created by the logged-in user
-        const isSongCreatedByUser = (rating) => {
-            // determine if the song is created by the logged-in user
-            return user === rating.username;
-        };
+      // Check if a song is created by the logged-in user
+      const isSongCreatedByUser = (rating) => {
+          // Determine if the song is created by the logged-in user
+          return user === rating.username;
+      };
 
-        const filterItems = () => {
-          const searchTerms = searchQuery.toLowerCase().trim();
-          if (filterParam === 'All') {
-            setFilteredData(
-              data.filter((rating) =>
+      const filterItems = () => {
+        const searchTerms = searchQuery.toLowerCase().trim();
+        if (filterParam === 'All') {
+          setFilteredData(
+            data.filter(
+              (rating) =>
                 searchTerms === '' ||
                 rating.username?.toLowerCase().includes(searchTerms) ||
                 rating.artist?.toLowerCase().includes(searchTerms) ||
                 rating.song?.toLowerCase().includes(searchTerms) ||
                 rating.rating?.toString().includes(searchTerms)
-              )
-            );
-          } else {
-            const filterProperty = filterParam?.toLowerCase();
-            setFilteredData(data.filter((rating) => rating[filterProperty]?.toLowerCase().includes(searchTerms)));
-          }
-        };
+            )
+          );
+        } else {
+          const filterProperty = filterParam?.toLowerCase();
+          setFilteredData(
+            data.filter((rating) => {
+              if (filterProperty === 'rating') {
+                // Convert rating to string for comparison
+                return rating[filterProperty]?.toString().includes(searchTerms.toLowerCase());
+              } else {
+                return rating[filterProperty]?.toLowerCase().includes(searchTerms.toLowerCase());
+              }
+            })
+          );
+        }
+      }
+
+      useEffect(() => {
+        filterItems();
+      }, [searchQuery, filterParam, data]);
+  
       
       // Handles logout request
       const handleLogout = () => {
@@ -187,7 +202,7 @@ function Ratings() {
             <Text>Loading ratings...</Text>
           ) : (
             <ScrollView style={styles.scrollView}>
-                {data.map((item) => (
+                {filteredData.map((item) => (
                 <View style={styles.ratingItem} key={item.id}>
                     <TouchableOpacity
                     onPress={() => navigation.navigate('ViewRating', { ratingData: item })}
