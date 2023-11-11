@@ -162,6 +162,26 @@ function Ratings() {
             }}
             color="#0C27A4"
           />
+          <View style={styles.searchContainer}>
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search for..."
+              value={searchQuery}
+              onChangeText={(text) => setSearchQuery(text)}
+            />
+            <View style={styles.filterSelect}>
+              <Text>Filter By: </Text>
+              <Picker
+                selectedValue={filterParam}
+                onValueChange={(itemValue) => setFilterParam(itemValue)}>
+                <Picker.Item label="No Filter" value="All" />
+                <Picker.Item label="User" value="username" />
+                <Picker.Item label="Artist" value="artist" />
+                <Picker.Item label="Song" value="song" />
+                <Picker.Item label="Rating" value="rating" />
+              </Picker>
+            </View>
+          </View>
           {loading ? (
             <Text>Loading ratings...</Text>
           ) : (
