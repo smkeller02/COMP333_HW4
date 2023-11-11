@@ -10,6 +10,7 @@ import AddNewRating from './addnewrating';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
 import UpdateRating from './update';
 import ViewRating from './view';
+import DeleteRating from './delete';
 
 const Stack = createNativeStackNavigator();
 
@@ -79,6 +80,13 @@ export default function App() {
         <Stack.Screen
           name="View Rating"
           component={ViewRating}
+          options={{
+            headerShown: false, 
+          }}
+        />
+        <Stack.Screen
+          name="Delete Rating"
+          component={DeleteRating}
           options={{
             headerShown: false, 
           }}

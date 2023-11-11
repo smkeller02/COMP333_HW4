@@ -4,10 +4,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
 // Deletes a given rating
-function DeleteRating({ ratingId, onDataChanged }) {
+function DeleteRating({ route }) {
   const navigation = useNavigation();
   const [message, setMessage] = useState("");
   const [showForm, setShowForm] = useState(true);
+  // Extract parameters from route
+  const { ratingId, onDataChanged } = route.params;
 
   const handleDelete = async () => {
     try {
@@ -39,9 +41,9 @@ function DeleteRating({ ratingId, onDataChanged }) {
     }
   };
 
+  // Function to handle canceling the logout process and navigate back to the 'Ratings' screen
   const handleCancel = () => {
-    // Hide the form when the Cancel button is clicked
-    setShowForm(false);
+    navigation.navigate('Ratings');
   };
 
   return (
