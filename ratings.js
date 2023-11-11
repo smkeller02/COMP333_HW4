@@ -18,6 +18,7 @@ function Ratings() {
     const [searchQuery, setSearchQuery] = useState('');
     const [filterParam, setFilterParam] = useState('All');
     const [filteredData, setFilteredData] = useState([]);
+
     //Told in TA session to use this to ignore warning as functionality was working
     LogBox.ignoreLogs([
       'Non-serializable values were found in the navigation state',
