@@ -15,10 +15,10 @@ function Ratings() {
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState(null);
     const navigation = useNavigation(); // Get the navigation object
+    const [searchQuery, setSearchQuery] = useState('');
     const [ratingDataChanged, setRatingDataChanged] = useState(false);
     const [filteredData, setFilteredData] = useState([]);
     const [filterParam, setFilterParam] = useState('All');
-    const [searchQuery, setSearchQuery] = useState('');
 
     //Told in TA session to use this to ignore warning as functionality was working
     LogBox.ignoreLogs([
