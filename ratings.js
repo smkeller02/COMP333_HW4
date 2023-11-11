@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import Logout from './logout';
 import ViewRating from './view'
+import DeleteRating from './delete';
 
 function Ratings() {
     const [data, setData] = useState([]); // Initialize data as an empty array
@@ -113,6 +114,15 @@ function Ratings() {
     return (
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         {starArray}
+        {isSongCreatedByUser ? (
+          <>
+            <TouchableOpacity
+            style={styles.deleteButton}
+            onPress={() => navigation.navigate('DeleteRating', { ratingId: item.id, onDataChanged: refreshRatingsData })}>
+              <FontAwesome name="trash" size={25} color="#FFFFFF" />
+            </TouchableOpacity>
+          </>
+        ) : null}
       </View>
     );
   };
