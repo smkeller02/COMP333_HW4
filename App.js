@@ -30,8 +30,10 @@ export default function App() {
   }, []); // Fetch the user data on app start
 
   return (
+    // main navigation container for the app
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
+        {/* Defining screens and their components */}
         <Stack.Screen 
           name="Login" 
           component={LoginUser}
@@ -50,14 +52,14 @@ export default function App() {
           name="Add New Rating"
           component={AddNewRating}
           options={{
-            headerShown: false, // Hide the header for the Logout screen
+            headerShown: false
           }}
         />
         <Stack.Screen
           name="Logout"
           component={Logout}
           options={{
-            headerShown: false, // Hide the header for the Logout screen
+            headerShown: false
           }}
         />
         <Stack.Screen
@@ -71,7 +73,7 @@ export default function App() {
           name="Update Rating"
           component={UpdateRating}
           options={{
-            headerShown: false, // Hide the header for the Logout screen
+            headerShown: false
           }}
         />
         <Stack.Screen
@@ -85,12 +87,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

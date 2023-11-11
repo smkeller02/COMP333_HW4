@@ -3,6 +3,7 @@ import { View, Text, Button, StyleSheet } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
+// Deletes a given rating
 function DeleteRating({ ratingId, onDataChanged }) {
   const navigation = useNavigation();
   const [message, setMessage] = useState("");
@@ -11,6 +12,7 @@ function DeleteRating({ ratingId, onDataChanged }) {
   const handleDelete = async () => {
     try {
       const username = await AsyncStorage.getItem("user");
+      // CHANGE IP ADDRESS TO YOUR SPECIFIC
       const response = await fetch("http://129.133.188.213/COMP333_HW4_backend/index.php/deleterating", {
         method: "DELETE",
         body: JSON.stringify({
