@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import Logout from './logout';
 import ViewRating from './view'
 import DeleteRating from './delete';
+import { TopRatedSongs, AverageSongRatings, SongsPerArtist } from './statistics_component';
 
 function Ratings() {
     const [data, setData] = useState([]); // Initialize data as an empty array
@@ -168,6 +169,9 @@ function Ratings() {
                     ) : null}
                 </View>
                 ))}
+                <TopRatedSongs ratings={data} />
+                <AverageSongRatings ratings={data} />
+                <SongsPerArtist ratings={data} />
             </ScrollView>
         )}
     </SafeAreaView>
