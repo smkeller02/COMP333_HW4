@@ -3,14 +3,17 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
+// Checks username and password inputs against database through backend and 'logs-in' a user if a match is found
 export default function LoginUser() {
+  // Set up states
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-  const navigation = useNavigation(); // Get the navigation object
+  const navigation = useNavigation();
 
+  // Function to handle user clicking signup button below that sends them to sign up screen
   const handleSignUp = () => {
-    navigation.navigate('CreateUser'); // Navigate to the 'SignUp' screen
+    navigation.navigate('CreateUser');
   };
 
   useEffect(() => {
@@ -18,6 +21,7 @@ export default function LoginUser() {
     loadUsername();
   }, []);
 
+  // Function to get username from AsyncStorage
   const loadUsername = async () => {
     try {
       const usernameInput = await AsyncStorage.getItem('user');
@@ -29,6 +33,7 @@ export default function LoginUser() {
     }
   };
 
+  // Handles login submission, sends user input and request to backend
   const handleSubmit = async () => {
     try {
       // CHANGE IP ADDRESS TO YOUR SPECIFIC
@@ -48,7 +53,7 @@ export default function LoginUser() {
         setUsername('');
         setPassword('');
         setMessage('');
-        // Save the username to AsyncStorage
+        // Save username to AsyncStorage
         await AsyncStorage.setItem('user', username);
         navigation.navigate('Ratings'); // navigate to ratings main page
       } else if (response.status === 400) {
@@ -63,7 +68,10 @@ export default function LoginUser() {
 
   return (
     <View style={styles.container}>
+      {/* welcome message */}
       <Text style={styles.welcomeText}>Welcome!</Text>
+
+      {/* Input fields for username and password */}
       <TextInput
         style={styles.input}
         value={username}
@@ -77,12 +85,17 @@ export default function LoginUser() {
         onChangeText={(text) => setPassword(text)}
         secureTextEntry={true} // To hide the password
       />
+
       <TouchableOpacity onPress={handleSubmit}>
         <Text style={styles.button}>Login</Text>
       </TouchableOpacity>
+
+      {/* If any error message come up, display here */}
       <View>
         <Text style={styles.message}>{message}</Text>
       </View>
+
+      {/* signup message + navigation */}
       <Text style={styles.signuptext}>Don't have an account?</Text>
       <TouchableOpacity onPress={handleSignUp}>
         <Text style={styles.signuptext}>Sign up here</Text>
@@ -91,6 +104,7 @@ export default function LoginUser() {
   );
 }
 
+// Styling
 const styles = StyleSheet.create({
   container: {
     flex: 1,

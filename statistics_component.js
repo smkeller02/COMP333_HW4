@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
+// Gathers the top rated songs from datatable
 function TopRatedSongs({ ratings }) {
   // Sort the ratings in descending order based on the star rating value (select the top five)
   const topRatedSongs = [...ratings].sort((a, b) => b.rating - a.rating).slice(0, 5);
@@ -15,6 +16,7 @@ function TopRatedSongs({ ratings }) {
   );
 }
 
+// Gathers the average rating of songs from datatable
 function AverageSongRatings({ ratings }) {
   // calculate total rating and the number of ratings
   const totalRatings = ratings.length;
@@ -30,6 +32,7 @@ function AverageSongRatings({ ratings }) {
   );
 }
 
+// Gathers the number of songs per artist from the ratings datatable
 function SongsPerArtist({ ratings }) {
   const artistCounts = {};
   // Iterate through the ratings to count the songs per artist.
@@ -49,6 +52,7 @@ function SongsPerArtist({ ratings }) {
   );
 }
 
+// Styling
 const styles = StyleSheet.create({
   statisticsContainer: {
     marginVertical: 10,

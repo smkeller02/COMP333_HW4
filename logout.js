@@ -3,26 +3,30 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
+// Logout component that checks if user wants to logout and if so, resets AsyncStorage and sends user to login screen
 const Logout = () => {
   const navigation = useNavigation();
 
+  // Function to handle the logout process
   const handleLogout = async () => {
     try {
       // Clear the user data from AsyncStorage
       await AsyncStorage.removeItem('user');
-      // Navigate back to the login screen (you can replace 'Login' with your actual screen name)
+      // Navigate back to the login screen
       navigation.navigate('Login');
     } catch (error) {
       console.error('Error logging out:', error);
     }
   };
 
+  // Function to handle canceling the logout process and navigate back to the 'Ratings' screen
   const handleCancel = () => {
     navigation.navigate('Ratings');
   };
 
   return (
     <View style={styles.container}>
+      {/* message asking if the user really wants to log out */}
       <Text style={styles.text}>Are you sure you want to log out?</Text>
       
       <TouchableOpacity onPress={handleLogout}>
@@ -37,6 +41,7 @@ const Logout = () => {
   );
 };
 
+// Styling
 const styles = StyleSheet.create({
   container: {
     flex: 1,
