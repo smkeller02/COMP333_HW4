@@ -136,15 +136,6 @@ function Ratings() {
     return (
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         {starArray}
-        {isSongCreatedByUser ? (
-          <>
-            <TouchableOpacity
-            style={styles.deleteButton}
-            onPress={() => navigation.navigate('DeleteRating', { ratingId: item.id, onDataChanged: refreshRatingsData })}>
-              <FontAwesome name="trash" size={25} color="#FFFFFF" />
-            </TouchableOpacity>
-          </>
-        ) : null}
       </View>
     );
   };
@@ -201,12 +192,16 @@ function Ratings() {
                     <Text style={styles.ratingText}>Rated by: {item.username}</Text>
                     </TouchableOpacity>
                     {isSongCreatedByUser(item) ? (
-                    <TouchableOpacity
-                        style={styles.updateButton}
-                        onPress={() => handleUpdate(item.id, item.rating)}
-                    >
+                    <View style={styles.iconContainer}>
+                      <TouchableOpacity style={styles.updateButton} onPress={() => handleUpdate(item.id, item.rating)}>
                         <FontAwesome name="pencil" size={25} color="#FFFFFF" />
-                    </TouchableOpacity>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={styles.deleteButton}
+                        onPress={() => navigation.navigate('DeleteRating', { ratingId: item.id, onDataChanged: () => setRatingDataChanged(!ratingDataChanged) })}>
+                        <FontAwesome name="trash" size={25} color="#FFFFFF" />
+                      </TouchableOpacity>
+                    </View>
                     ) : null}
                 </View>
                 ))}
