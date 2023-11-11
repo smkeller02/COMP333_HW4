@@ -3,17 +3,21 @@ import { View, Text, TextInput, Button, TouchableOpacity, StyleSheet } from 'rea
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
 
+// Updates a given rating with new inputs from user
 function UpdateRating({ route }) {
+  // Set states
   const [artist, setArtist] = useState('');
   const [song, setSong] = useState('');
-  const [rating, setRating] = useState(0); // Initialize rating as a number
+  const [rating, setRating] = useState(0);
   const [message, setMessage] = useState('');
+  // Extract parameters from route
   const { ratingId, user, onDataChanged } = route.params;
   const navigation = useNavigation();
 
   useEffect(() => {
     if (ratingId) {
       // Fetch the existing rating data for the given ratingId
+      // CHANGE IP ADDRESS TO YOUR SPECIFIC
       fetch(`http://129.133.188.213/COMP333_HW4_backend/index.php/viewrating?id=${ratingId}`, {
         method: 'GET',
         headers: {
@@ -27,7 +31,7 @@ function UpdateRating({ route }) {
           } else {
             setArtist(data[0].artist);
             setSong(data[0].song);
-            setRating(data[0].rating); // Ensure rating is a number
+            setRating(data[0].rating);
           }
         })
         .catch((error) => {
@@ -36,16 +40,20 @@ function UpdateRating({ route }) {
     }
   }, [ratingId]);
 
+  // handles cancel request, sends user back to main ratings screen
   const handleCancel = () => {
     setArtist('');
     setSong('');
-    setRating(0); // Reset rating to 0
+    setRating(0);
     setMessage('');
     navigation.navigate('Ratings');
   };
 
+  // handles submit request for updating a rating
   const handleSubmit = async () => {
     try {
+      // Send POST request to backend with user input
+      // CHANGE IP ADDRESS TO YOUR SPECIFIC
       let response = await fetch('http://129.133.188.213/COMP333_HW4_backend/index.php/updaterating', {
         method: 'POST',
         body: JSON.stringify({
@@ -62,10 +70,14 @@ function UpdateRating({ route }) {
 
       let resJson = await response.json();
       if (response.status === 200) {
+        // If good HTTP request:
         setMessage('Rating updated');
+        // Trigger callback to update data
         onDataChanged();
+        // Navigate back to main page
         navigation.navigate('Ratings');
       } else if (response.status === 400) {
+        // Bad HTTP request:
         setMessage(resJson.error);
       } else {
         setMessage('Something went wrong');
@@ -86,6 +98,7 @@ function UpdateRating({ route }) {
     const maxRating = 5;
     const starArray = [];
 
+    // make star icon for each rating value
     for (let i = 0; i < maxRating; i++) {
       starArray.push(
         <TouchableOpacity
@@ -102,6 +115,7 @@ function UpdateRating({ route }) {
       );
     }
 
+    // Return view with star icons
     return (
       <View style={styles.starRatingContainerHorizontal}>{starArray}</View>
       );
@@ -109,7 +123,10 @@ function UpdateRating({ route }) {
 
   return (
     <View style={styles.updateRating}>
-       <Text style={styles.userText}>Username: {user}</Text>
+      {/* display username at top of screen */}
+      <Text style={styles.userText}>Username: {user}</Text>
+
+      {/* display artist, song, and rating with preloaded values */}
       <View>
         <TextInput
           style={styles.input}
@@ -123,14 +140,20 @@ function UpdateRating({ route }) {
           onChangeText={(text) => setSong(text)}
           placeholder="Song"
         />
-      <Text style={styles.text}>{renderStars()}</Text>
+        {/* Render stars */}
+        <Text style={styles.text}>{renderStars()}</Text>
+
+        {/* update button that triggers submit process */}
         <TouchableOpacity onPress={handleSubmit} style={styles.buttonContainer}>
           <Text style={styles.text}>Update rating</Text>
         </TouchableOpacity>
+
+        {/* Cancel button that navigates users back to main screen */}
         <TouchableOpacity onPress={handleCancel} style={styles.buttonContainer}>
           <Text style={styles.text}>Cancel</Text>
         </TouchableOpacity>
 
+        {/* Display any error messages if they occur */}
         <View style={styles.messageContainer}>
           {message ? <Text style={styles.messageText}>{message}</Text> : null}
         </View>
@@ -139,6 +162,7 @@ function UpdateRating({ route }) {
   );
 }
 
+// Styling
 const styles = StyleSheet.create({
   updateRating: {
     flex: 1,

@@ -3,16 +3,18 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// Creates a new user and enters into database
 function CreateUser() {
+  // Set up states
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
   const [message, setMessage] = useState('');
-  const navigation = useNavigation(); // Get the navigation object
+  const navigation = useNavigation();
 
-
+  // handles navigation to the login screen for existing users
   const handleLogin = () => {
-    navigation.navigate('Login'); // Navigate to the 'SignUp' screen
+    navigation.navigate('Login'); // Navigate to the login screen
   };
 
   useEffect(() => {
@@ -20,6 +22,7 @@ function CreateUser() {
     loadUsername();
   }, []);
 
+  // load username from asyncstorage
   const loadUsername = async () => {
     try {
       const usernameInput = await AsyncStorage.getItem('user');
@@ -31,6 +34,7 @@ function CreateUser() {
     }
   };
 
+  // handles password checking, if passwords match, send user inputs to backend to add to database
   const handleSubmit = async () => {
     if (password !== password2) {
       setMessage('Passwords don\'t match');
@@ -39,6 +43,7 @@ function CreateUser() {
 
     try {
       // Send a POST request to create a new user
+      // CHANGE IP ADDRESS TO YOUR SPECIFIC
       const response = await fetch('http://129.133.188.213/COMP333_HW4_backend/index.php/createuser', {
         method: 'POST',
         body: JSON.stringify({
@@ -53,15 +58,15 @@ function CreateUser() {
       const responseData = await response.json();
 
       if (response.status === 200) {
-        // Good HTTP response
+        // Successful sign-up
         setUsername('');
         setPassword('');
         setPassword2('');
         setMessage('');
-        //onCreateSuccess(); // Trigger the callback for successful sign-up
         // Save the username to AsyncStorage
         await AsyncStorage.setItem('user', username);
-        navigation.navigate('Ratings'); // Use navigation prop to navigate
+        // navigate to main screen
+        navigation.navigate('Ratings');
       } else if (response.status === 400) {
         // Bad HTTP response
         setMessage(responseData.error);
@@ -75,7 +80,10 @@ function CreateUser() {
 
   return (
     <View style={styles.container}>
+      {/* welcome message */}
       <Text style={styles.text}>Welcome! Create an account: </Text>
+      
+      {/* Input fields */}
       <TextInput
         style={styles.input}
         value={username}
@@ -96,12 +104,18 @@ function CreateUser() {
         onChangeText={(text) => setPassword2(text)}
         secureTextEntry={true}
       />
+
+      {/* Triggers the sign-up process when pressed */}
       <TouchableOpacity onPress={handleSubmit}>
         <Text style={styles.text}>Sign Up</Text>
       </TouchableOpacity>
+
+      {/* display and error messages if they come up */}
       <View>
         <Text style={styles.message}>{message}</Text>
       </View>
+
+      {/* login navigation for users who already have an account */}
       <Text style={styles.logintext}>Already have an account?</Text>
       <TouchableOpacity onPress={handleLogin}>
         <Text style={styles.logintext}>Login</Text>
@@ -110,6 +124,7 @@ function CreateUser() {
   );
 }
 
+// Styling
 const styles = StyleSheet.create({
   container: {
     flex: 1,
