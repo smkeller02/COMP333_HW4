@@ -181,13 +181,13 @@ function Ratings() {
           />
           <View style={styles.searchContainer}>
             <TextInput
-              style={styles.searchInput}
+              style={styles.logouttext}
               placeholder="Search for..."
               value={searchQuery}
               onChangeText={(text) => setSearchQuery(text)}
             />
             <View style={styles.filterSelect}>
-              <Text>Filter By: </Text>
+              <Text style={styles.filtertext}>Filter By: </Text>
               <Picker
                 selectedValue={filterParam}
                 onValueChange={(itemValue) => setFilterParam(itemValue)}>
@@ -206,7 +206,7 @@ function Ratings() {
                 {filteredData.map((item) => (
                 <View style={styles.ratingItem} key={item.id}>
                     <TouchableOpacity
-                    onPress={() => navigation.navigate('ViewRating', { ratingData: item })}
+                    onPress={() => navigation.navigate('View Rating', { ratingData: item })}
                     style={styles.ratingItem}
                     >
                     <Text style={styles.songText}>{item.song}</Text>
@@ -238,51 +238,81 @@ function Ratings() {
 );
 }
 
+// Styling
 const styles = StyleSheet.create({
     ratingItem: {
       borderBottomWidth: 1,
       borderBottomColor: '#0C27A4',
       marginVertical: 10,
       padding: 20,
-      alignItems: 'center', // Center the content both horizontally and vertically
+      alignItems: 'center',
       backgroundColor: '#0C27A4',
     },
-
-    // Add a style for text
-    ratingText: {
+  ratingText: {
     color: '#FFFFFF', 
     textAlign: 'center',
   },
+  songText: {
+      color: '#FFFFFF',
+      fontWeight: '900', // Make the text bold
+      textAlign: 'center',
+  },
+  userText: {
+      color: '#0C27A4',
+      fontWeight: '900', // Make the text bold
+      textAlign: 'center',
+      fontSize: 24,
+      paddingTop: 15,
+      paddingBottom: 10
+  },
+  scrollView: {
+      backgroundColor: '#FFFFFF',
+      marginHorizontal: 20,
+  },
+  container: {
+      flex: 1,
+      paddingTop: StatusBar.currentHeight,
+    },
+  logouttext: {
+      color: '#0C27A4',
+      fontSize: 18,
+      fontWeight: '500',
+      paddingTop: 10,
+      paddingRight: 20,
+      textAlign: 'right'
+    },
+  filtertext: {
+      color: '#0C27A4',
+      fontSize: 18,
+      fontWeight: '400',
+      paddingTop: 10,
+      paddingLeft: 20
+    },
+    searchContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginVertical: 10,
+      marginHorizontal: 5
+    },
+    searchInput: {
+      flex: 1,
+      height: 40,
+      borderColor: '#0C27A4',
+      borderWidth: 1,
+      borderRadius: 5,
+      paddingHorizontal: 10,
+      marginRight: 10,
+      color: '#0C27A4'
+    },
+    filterSelect: {
+      flexBasis: '40%',
+      borderWidth: 1,
+      borderColor: '#0C27A4',
+      borderRadius: 5,
+      overflow: 'hidden',
+    }
 
-    songText: {
-        color: '#FFFFFF',
-        fontWeight: '900', // Make the text bold
-        textAlign: 'center',
-    },
-    userText: {
-        color: '#0C27A4',
-        fontWeight: '900', // Make the text bold
-        textAlign: 'center',
-        fontSize: 24,
-        paddingTop: 15,
-        paddingBottom: 10
-    },
-    scrollView: {
-        backgroundColor: '#FFFFFF',
-        marginHorizontal: 20,
-    },
-    container: {
-        flex: 1,
-        paddingTop: StatusBar.currentHeight,
-      },
-      logouttext: {
-        color: '#0C27A4',
-        fontSize: 18,
-        fontWeight: '500',
-        paddingTop: 10,
-        paddingRight: 20,
-        textAlign: 'right'
-      }
   });
   
 
