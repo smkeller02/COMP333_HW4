@@ -210,9 +210,9 @@ function Ratings() {
                     ) : null}
                 </View>
                 ))}
-                <TopRatedSongs ratings={data} />
-                <AverageSongRatings ratings={data} />
-                <SongsPerArtist ratings={data} />
+                <TopRatedSongs ratings={filteredData} />
+                <AverageSongRatings ratings={filteredData} />
+                <SongsPerArtist ratings={filteredData} />
             </ScrollView>
         )}
     </SafeAreaView>
