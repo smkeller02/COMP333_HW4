@@ -6,9 +6,9 @@ Minji Woo (<mwoo@wesleyan.edu>)
 
 # Purpose:
 Learning how to:</br>
-1. designing and implementing a mobile app for iOS and Android with React Native</br>
-2. connecting your frontend to your REST API from homework 3 to create an integrated mobile and web app with CRUD functionality</br>
-3. setting up and using mobile app development tools.
+1. Design and implement a mobile app for iOS and Android with React Native</br>
+2. Connect frontend to REST API from homework 3 to create an integrated mobile and web app with CRUD functionality</br>
+3. Set up and use mobile app development tools.
 
 # Setting up the developement environment + how to run code:
 1. Set up the backend. This can be done here:</br>
@@ -36,6 +36,7 @@ Follow the README in the repo to properly set up the backend
 - update.js - component that connects with backend to update a given rating selected by user on frontend
 - view.js - component that lets a user view a single rating
 - logout.js - component that logs checks with user if they want to log out
+- statistics_component.js - calculates statistics for ratings, songs, etc. displayed on main ratings screen
 
 # Sources Cites:
 https://expo.dev/ - expo</br>

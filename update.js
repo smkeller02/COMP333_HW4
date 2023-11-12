@@ -155,7 +155,7 @@ function UpdateRating({ route }) {
 
         {/* Display any error messages if they occur */}
         <View style={styles.messageContainer}>
-          {message ? <Text style={styles.messageText}>{message}</Text> : null}
+          {message ? <Text style={styles.message}>{message}</Text> : null}
         </View>
       </View>
     </View>

@@ -107,7 +107,7 @@ function CreateUser() {
 
       {/* Triggers the sign-up process when pressed */}
       <TouchableOpacity onPress={handleSubmit}>
-        <Text style={styles.text}>Sign Up</Text>
+        <Text style={styles.loginbutton}>Sign Up</Text>
       </TouchableOpacity>
 
       {/* display and error messages if they come up */}
@@ -118,7 +118,7 @@ function CreateUser() {
       {/* login navigation for users who already have an account */}
       <Text style={styles.logintext}>Already have an account?</Text>
       <TouchableOpacity onPress={handleLogin}>
-        <Text style={styles.logintext}>Login</Text>
+        <Text style={styles.loginsend}>Login</Text>
       </TouchableOpacity>
     </View>
   );
@@ -145,6 +145,13 @@ const styles = StyleSheet.create({
     color: '#FF6B6B',
     fontSize: 18
   },
+  loginbutton: {
+    color: '#0C27A4',
+    fontSize: 20,
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 20,
+    fontWeight: '500'
+  },
   text: {
     color: '#FFFFFF',
     fontSize: 20,
@@ -153,7 +160,15 @@ const styles = StyleSheet.create({
   logintext: {
     color: '#FFFFFF',
     fontSize: 18,
-    paddingTop: 20
+    paddingTop: 20,
+    paddingBottom: 15
+  },
+  loginsend: {
+    color: '#0C27A4',
+    fontSize: 18,
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 20,
+    fontWeight: '500'
   }
 });
 
