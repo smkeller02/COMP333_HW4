@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, Text, Button, StyleSheet, TouchableOpacity } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
@@ -8,9 +8,21 @@ function DeleteRating({ route }) {
   const navigation = useNavigation();
   const [message, setMessage] = useState("");
   const [showForm, setShowForm] = useState(true);
+  const [user, setUser] = useState(null); // Initialize user state
   // Extract parameters from route
   const { ratingId, onDataChanged } = route.params;
 
+  // Retrieve the user's name from AsyncStorage
+  AsyncStorage.getItem('user')
+  .then((value) => {
+      if (value) {
+          setUser(value);
+      }
+  })
+  .catch((error) => {
+      console.error(error);
+  });
+  
   const handleDelete = async () => {
     try {
       const username = await AsyncStorage.getItem("user");
@@ -50,9 +62,15 @@ function DeleteRating({ route }) {
     <View style={styles.container}>
       {showForm ? (
         <>
-          <Text>Are you sure you want to delete this rating?</Text>
-          <Button title="Delete" onPress={handleDelete} />
-          <Button title="Cancel" onPress={handleCancel} />
+          <Text style={styles.deleteTitle}>Are you sure you want to delete this rating {user}?</Text>
+          <TouchableOpacity onPress={handleDelete}>
+            <Text style={styles.deletetext}>Delete</Text>
+          </TouchableOpacity>  
+
+          <TouchableOpacity onPress={handleCancel}>
+            <Text style={styles.canceltext}>Cancel</Text>
+          </TouchableOpacity>
+          
           {message ? <Text>{message}</Text> : null}
         </>
       ) : null}
@@ -65,6 +83,23 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#0C27A4'
+  },
+  deleteTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    textAlign: 'center'
+  },
+  canceltext: {
+    color: '#FFFFFF',
+    fontSize: 17,
+    paddingTop: 20
+  },
+  deletetext: {
+    color: '#FFFFFF',
+    fontSize: 20,
+    paddingTop: 20
   },
 });
 

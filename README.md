@@ -55,3 +55,7 @@ https://stackoverflow.com/questions/52250061/react-native-how-to-call-multiple-f
 https://stackoverflow.com/questions/59294890/react-navigation-usefocuseffect-is-not-a-function - TypeError for useFocusEffect</br>
 https://timmousk.com/blog/git-push-hangs/ - git push stuck</br>
 https://stackoverflow.com/questions/66310505/non-serializable-values-were-found-in-the-navigation-state-when-passing-a-functi - non-serializable values warning</br>
+https://reactnative.dev/docs/modal - how to use modal</br>
+https://stackoverflow.com/questions/45920946/background-color-turns-black-after-onpress-when-displayed-on-top-of-flatlist - TouchableOpacity</br>
+https://www.w3schools.com/css/css3_colors.asp - coloring for filter</br>
+https://stackoverflow.com/questions/72558495/property-picker-does-not-exist-on-type-appcomponent - Picker</br>
