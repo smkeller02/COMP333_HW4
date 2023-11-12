@@ -38,8 +38,9 @@ const Logout = () => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.text}>Username: {user}</Text>
       {/* message asking if the user really wants to log out */}
-      <Text style={styles.text}>Are you sure you want to log out {user}?</Text>
+      <Text style={styles.text}>Are you sure you want to log out?</Text>
       
       <TouchableOpacity onPress={handleLogout}>
         <Text style={styles.logoutbutton}>Logout</Text>

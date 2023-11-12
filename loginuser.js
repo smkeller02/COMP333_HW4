@@ -98,7 +98,7 @@ export default function LoginUser() {
       {/* signup message + navigation */}
       <Text style={styles.signuptext}>Don't have an account?</Text>
       <TouchableOpacity onPress={handleSignUp}>
-        <Text style={styles.signuptext}>Sign up here</Text>
+        <Text style={styles.signupbutton}>Sign up here</Text>
       </TouchableOpacity>
     </View>
   );
@@ -131,12 +131,23 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   button: {
-    color: '#FFFFFF',
-    fontSize: 22
+    color: '#0C27A4',
+    fontSize: 22,
+    fontWeight: '500',
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 20
   },
   signuptext: {
     color: '#FFFFFF',
     fontSize: 18,
-    paddingTop: 20
+    paddingTop: 20,
+    paddingBottom: 15
+  },
+  signupbutton: {
+    color: '#0C27A4',
+    fontSize: 18,
+    fontWeight: '500',
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 20
   }
 });

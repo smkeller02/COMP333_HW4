@@ -422,7 +422,7 @@ const styles = StyleSheet.create({
   modalCancel: {
     paddingVertical: 10,
     fontSize: 16,
-    color: 'red',
+    color: '#FF6B6B',
     fontWeight: 'bold',
   },
   updateButton: {
