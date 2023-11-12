@@ -10,7 +10,7 @@ function TopRatedSongs({ ratings }) {
     <View style={styles.statisticsContainer}>
       <Text style={styles.statisticsTitle}>Top Rated Songs</Text>
       {topRatedSongs.map((song) => (
-        <Text key={song.id}>{song.song} by {song.artist} - Rating: {song.rating}</Text>
+        <Text style={styles.text} key={song.id}>{song.song} by {song.artist} - Rating: {song.rating}</Text>
       ))}
     </View>
   );
@@ -27,7 +27,7 @@ function AverageSongRatings({ ratings }) {
   return (
     <View style={styles.statisticsContainer}>
       <Text style={styles.statisticsTitle}>Average Song Ratings</Text>
-      <Text>Average Rating: {averageRating}</Text>
+      <Text style={styles.text}>Average Rating: {averageRating}</Text>
     </View>
   );
 }
@@ -44,7 +44,7 @@ function SongsPerArtist({ ratings }) {
     <View style={styles.statisticsContainer}>
       <Text style={styles.statisticsTitle}>Number of Songs per Artist</Text>
       {Object.entries(artistCounts).map(([artist, count]) => (
-        <Text key={artist}>
+        <Text style={styles.text} key={artist}>
           {artist}: {count} {count === 1 ? 'song' : 'songs'} {/* song if 1, songs if more than 1*/}
         </Text>
       ))}
@@ -58,8 +58,13 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   statisticsTitle: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: 'bold',
+    color: '#0C27A4'
+  },
+  text: {
+    color: '#0C27A4',
+    fontSize: 18
   },
 });
 

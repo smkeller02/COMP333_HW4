@@ -1,11 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
 // Logout component that checks if user wants to logout and if so, resets AsyncStorage and sends user to login screen
 const Logout = () => {
+  const [user, setUser] = useState(null); // Initialize user state
   const navigation = useNavigation();
+
+    // Retrieve the user's name from AsyncStorage
+    AsyncStorage.getItem('user')
+    .then((value) => {
+        if (value) {
+            setUser(value);
+        }
+    })
+    .catch((error) => {
+        console.error(error);
+    });
 
   // Function to handle the logout process
   const handleLogout = async () => {
@@ -27,7 +39,7 @@ const Logout = () => {
   return (
     <View style={styles.container}>
       {/* message asking if the user really wants to log out */}
-      <Text style={styles.text}>Are you sure you want to log out?</Text>
+      <Text style={styles.text}>Are you sure you want to log out {user}?</Text>
       
       <TouchableOpacity onPress={handleLogout}>
         <Text style={styles.logoutbutton}>Logout</Text>
@@ -35,7 +47,7 @@ const Logout = () => {
 
       <TouchableOpacity onPress={handleCancel} style={styles.buttonContainer}>
           <Text style={styles.cancelbutton}>Cancel</Text>
-        </TouchableOpacity>
+      </TouchableOpacity>
 
     </View>
   );
@@ -65,6 +77,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     paddingBottom: 20,
     color: '#FFFFFF',
+    textAlign: 'center'
   }
 });
 
